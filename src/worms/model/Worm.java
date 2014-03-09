@@ -1,261 +1,295 @@
 package worms.model;
 
-import be.kuleuven.cs.som.annotate.Basic;
+import be.kuleuven.cs.som.annotate.*;
 
 /**
  * 
- * A class of worms involving a X and Y coordinate, a direction, a radius, a mass, a rho
+ * A class of worms involving a name, an x-coordinate, a y-coordinate, an direction,
+ * a radius and a current number of action points.
  * 
  * @version 1.0
- * @author Jonas Thys en Jeroen Reinenbergh
+ * @author Jonas Thys & Jeroen Reinenbergh
  * 
  */
 
 public class Worm {
-	
+
 	/**
-	 * @param 	xCoordinate
-	 * 			The x-coordinate of the worm's position.
-	 * @param	yCoordinate
-	 * 			The y-coordinate of the worm's position.
-	 * @param	direction
-	 * 			The direction which the worm faces.
+	 * Initialize this new worm with given name, given x-coordinate, given y-coordinate,
+	 * given direction and given radius.
 	 * 
-	 * 
-	 * 
-	 */
-	
-	double x;
-	double y;
-	
-	double direction;
-	
-	double radius;
-	
-	double mass;
-	
-	double lowerBoundOfRadius;
-	
-	int numberOfActionPoints;
-	
-	int maxNumberOfActionPoints;
-	
-	
-	
-	
-	/**
-	 * 
-	 *  Initialize this new worm with a given radius and starting direction and given X and Y coordinates. 
-	 * 
-	 * @param 	radius
-	 * @param 	direction
-	 * @param 	x
-	 * @param 	y
-	 * 
+	 * @param	name (def)
+	 * 			The name of the worm.
+	 * @param 	x (def)
+	 * 			The x-coordinate of the worm's position expressed in metres.
+	 * @param	y (def)
+	 * 			The y-coordinate of the worm's position expressed in metres.
+	 * @param	direction (nominal)
+	 * 			The direction towards which the worm faces expressed in radians.
+	 * @param	radius (def)
+	 * 			The radius of the spherical body of the worm expressed in metres.
+	 * @post 	The new name of this worm is equal to the given name.
+	 * 		|	new.getName() = name
 	 * @post 	The new radius of this worm is equal to the given radius.
 	 * 		|	new.getRadius() = radius
 	 * @post 	The new direction of this worm is equal to the given direction.
 	 * 		|	new.getDirection() = direction
-	 * @post 	The new x of this worm is equal to the given x.
+	 * @post 	The new x-coordinate of this worm is equal to the given x-coordinate.
 	 * 		|	new.getX() = x
-	 * @post 	The new y of this worm is equal to the given y.
+	 * @post 	The new y-coordinate of this worm is equal to the given y-coordinate.
 	 * 		|	new.getY() = y
-	 * @throws 	IllegalArgumentException("Too small radius")
-	 * 			This worm can't have a radius which is too small.
-	 * 		|	! canHaveAsRadius(radius)
+	 * @post	The new current number of action points of this worm is equal to the maximum number of action points of this worm.
+	 * 		|	new.getNumberOfActionPoints() = new.getMaxNumberOfActionPoints()
+	 * @throws 	IllegalArgumentException("Radius is too small!")
+	 * 			The given radius is too small for any worm.
+	 * 		|	! isPossibleRadius(radius)
+	 * @throws 	IllegalArgumentException("Name is not valid!")
+	 * 			The given name is not a valid name for any worm.
+	 * 		|	! isPossibleName(name)
 	 * 
 	 */
 	
-	public Worm (double radius, double direction, double x, double y, int numberOfActionPoints)throws IllegalArgumentException {
-		if (!canHaveAsRadius(radius))
-			throw new IllegalArgumentException("Too small radius");
-		this.radius = radius;
-		this. direction = direction;
-		this.x = x;
-		this.y = y;
-		this.mass = calculateMass();
-		this.numberOfActionPoints = numberOfActionPoints;
-		calculateMaxNumberOfActionPoints();
-		
+	public Worm (String name, double radius, double direction, double x, double y) throws IllegalArgumentException {
+		setRadius(radius);
+		setDirection(direction);
+		setName(name);
+		setX(x);
+		setY(y);
+		setNumberOfActionPoints(this.getMaxNumberOfActionPoints());
+	}
+
+	/**
+	 * Return the name of the worm.
+	 * 	The name expresses the alphabetic identification of the worm.
+	 */
+	@Basic
+	public String getName() {
+		return name;
+	}	
+	
+	/**
+	 * Check whether the given name is a possible name for any worm.
+	 * 
+	 * @param	name
+	 * 			The name to check.
+	 * @return	True if and only if the given name contains at least 2 charachters,
+	 * 			starts with an uppercase letter and only contains letters, quotes and spaces.
+	 * 		|	result == (name.matches("[A-Z]"+"[A-Za-z\"\' ]+"))
+	 */
+	public static boolean isPossibleName(String name) {
+		return name.matches("[A-Z]"+"[A-Za-z\"\' ]+");
+	}	
+	
+	/**
+	 * Set the name of this worm to the given name
+
+	 * @param	name
+	 * 			The new name of this worm.
+	 * @post	The new name of this worm is equal to the given name.
+	 * 		|	new.getName() == name
+	 * @throws 	IllegalArgumentException("Name is not valid!")
+	 * 			This worm cannot have the given name as its name.
+	 * 		|	! isPossibleName(name)
+	 */	
+	public void setName(String name) throws IllegalArgumentException {
+		if (!isPossibleName(name))
+			throw new IllegalArgumentException("Name is not valid!");
+		this.name = name;
 	}
 	
 	/**
-	 * 
-	 * @return 	the X coordinate of the worm
-	 * 		|	result == this.getX() = x
+	 * Variable registering the name of this worm.
 	 */
-	
+	private String name;
+
+	/**
+	 * Return the x-coordinate of the worm.
+	 * 	The x-coordinate expresses the position
+	 * 	at which the worm is located on the x-axis.
+	 */
 	@Basic
 	public double getX() {
 		return x;
 	}
+	
+	/**
+	 * Set the x-coordinate of this worm to the given x-coordinate
 
-
+	 * @param	x
+	 * 			The new x-coordinate of this worm.
+	 * @post	The new x-coordinate of this worm is equal to the given x-coordinate.
+	 * 		|	new.getX() == x
+	 */
 	public void setX(double x) {
 		this.x = x;
 	}
-	
+
 	/**
-	 * 
-	 * @return 	the Y coordinate of the worm
-	 * 		|	result == this.getY() = y
+	 * Variable registering the x-coordinate of this worm.
 	 */
-	
+	private double x;
+
+	/**
+	 * Return the y-coordinate of the worm.
+	 * 	The y-coordinate expresses the position
+	 * 	at which the worm is located on the y-axis.
+	 */
 	@Basic
 	public double getY() {
 		return y;
 	}
 
-	
+	/**
+	 * Set the y-coordinate of this worm to the given y-coordinate
+
+	 * @param	y
+	 * 			The new y-coordinate of this worm.
+	 * @post	The new y-coordinate of this worm is equal to the given y-coordinate.
+	 * 		|	new.getY() == y
+	 */
 	public void setY(double y) {
 		this.y = y;
 	}
 	
 	/**
-	 * 
-	 * @return 	the direction of the worm
-	 * 		|	result == this.getDirection() = direction
+	 * Variable registering the y-coordinate of this worm.
 	 */
-	
+	private double y;
+
+	/**
+	 * Return the direction of the worm.
+	 * 	The direction expresses the direction towards which the worm is faced.
+	 */
 	@Basic
 	public double getDirection() {
 		return direction;
 	}
 
-	
+	/**
+	 * Set the direction of this worm to the given direction
+
+	 * @param	direction
+	 * 			The new direction of this worm.
+	 * @post	The new direction of this worm is equal to the given direction.
+	 * 		|	new.getDirection() == direction
+	 */
 	public void setDirection(double direction) {
 		this.direction = direction;
 	}
 
 	/**
-	 * 
-	 * @return 	the radius of the worm
-	 * 		|	result == this.getRadius() = radius
+	 * Variable registering the direction of this worm.
 	 */
-	
+	private double direction;
+
+	/**
+	 * Return the radius of the worm.
+	 * 	The radius expresses the radius of the spherical body of the worm.
+	 */
 	@Basic
 	public double getRadius() {
 		return radius;
 	}
 
+	/**
+	 * Check whether the given radius is a possible radius for any worm.
+	 * 
+	 * @param	radius
+	 * 			The radius to check.
+	 * @return	True if and only if the given radius is not smaller than its lower bound.
+	 * 		|	result == (radius >= lowerBoundOfRadius)
+	 */
+	public boolean isPossibleRadius(double radius){
+		return radius >= lowerBoundOfRadius;
+	}
 	
-	public void setRadius(double radius) {
+	/**
+	 * Set the radius of this worm to the given radius
+
+	 * @param	radius
+	 * 			The new radius of this worm.
+	 * @post	The new radius of this worm is equal to the given radius.
+	 * 		|	new.getRadius() == radius
+	 * @throws 	IllegalArgumentException("Radius is too small!")
+	 * 			The given radius is too small for any worm.
+	 * 		|	! isPossibleRadius(radius)
+	 */
+	public void setRadius(double radius) throws IllegalArgumentException {
+		if (!isPossibleRadius(radius))
+			throw new IllegalArgumentException("Radius is too small!");
 		this.radius = radius;
 	}
 
 	/**
-	 * 
-	 * @return 	the lower bound of the radius of the worm
-	 * 		|	result == this.getLowerBoundofRadius() = lowerBoundOfRadius
+	 * Return the mass of the worm.
+	 * @return 	Mass of the worm based on calculations involving the radius of the worm.
+	 * 		|	result == (1062 * (4 / 3) * Math.PI * Math.pow(radius, 3))
 	 */
-	
-	@Basic
-	public double getLowerBoundOfRadius() {
-		return lowerBoundOfRadius;
-	}
-
-
-	public void setLowerBoundOfRadius(double lowerBoundOfRadius) {
-		this.lowerBoundOfRadius = lowerBoundOfRadius;
+	public double getMass() {
+		double p = 1062;
+		return (p * (4 / 3) * Math.PI * Math.pow(this.radius, 3));
 	}
 
 	/**
-	 * 
-	 * @return 	the mass of the worm
-	 * 		|	result == this.getMass() = mass
+	 * Return the maximum number of action points of the worm.
+	 * @return	Maximum number of action points of the worm based on calculations involving the mass of the worm.
 	 */
-	
-	@Basic
-	public double getMass() {
-		return mass;
-	}
-	
-	public void setMass(double mass){
-		this.mass = mass;
-	}
+	@Raw
+	private int getMaxNumberOfActionPoints(){
+		return (int) Math.round(this.getMass());
+	}	
 
+	/**
+	 * Variable registering the radius of this worm.
+	 */
+	private double radius;
+
+	/**
+	 * Variable registering the lower bound of the radius.
+	 */	
+	private double lowerBoundOfRadius = 0.25;
+
+	/**
+	 * Return the current number of action points of the worm.
+	 * 	The current number of action points expresses the number of action points this worm has left.
+	 */	
 	@Basic
 	public int getNumberOfActionPoints() {
 		return numberOfActionPoints;
 	}
 
-	public void setNumberOfActionPoints(int numberOfActionPoints) {
+	/**
+	 * Set the number of action points of this worm to the given number of action points.
+	 * 
+	 * @param	numberOfActionPoints
+	 * 			The new number of action points for this worm.
+	 * @post	If the given number of action points is not below zero and not above the maximum number of action points,
+	 * 			the new number of action points of this worm is equal to the given number of action points.
+	 * 			If the given number of action points is negative, the new number of action points is equal to zero.
+	 * 			If the given number of action points is greater than the maximum number of action points, the new number
+	 * 			of action points is equal to the maximum number of action points.
+	 * 		|	if ((numberOfActionPoints >= 0) && (numberOfActionPoints <= this.getMaxNumberOfActionPoints())) new.getNumberOfActionPoints == numberOfActionPoints
+	 * 		|	else if (numberOfActionPoints < 0) new.getNumberOfActionPoints == 0
+	 * 		|	else if (numberOfActionPoints > this.getMaxNumberOfActionPoints()) new.getNumberOfActionPoints == this.getMaxNumberOfActionPoints
+	 */
+	public void setNumberOfActionPoints(int numberOfActionPoints) throws IllegalArgumentException {
+		if(numberOfActionPoints < 0)
+			numberOfActionPoints = 0;
+		else if(numberOfActionPoints > this.getMaxNumberOfActionPoints())
+			numberOfActionPoints = this.getMaxNumberOfActionPoints();
 		this.numberOfActionPoints = numberOfActionPoints;
 	}
 	
-	@Basic
-	public int getMaxNumberOfActionPoints() {
-		return maxNumberOfActionPoints;
-	}
-
-	public void setMaxNumberOfActionPoints(int maxNumberOfActionPoints) {
-		this.maxNumberOfActionPoints = maxNumberOfActionPoints;
-	}
-
 	/**
-	 * 
-	 * @param 	radius
-	 * 			The radius relative to a worms position
-	 * @post	The homogeneous density will be calculated.
-	 * 		|	new.getRho() == rho
-	 * @throws	IllegalArgumentException(radius, this)
-	 * 		|	! canHaveAsRadius(radius)
-	 * 
-	 */
-	private double calculateRho(double radius) throws IllegalArgumentException{
-		if (this.canHaveAsRadius(radius) == true)
-			return (1062 / Math.pow(radius, 3));
-		else
-			throw new IllegalArgumentException ("Too small radius");
-	}
-	
-	/**
-	 * 
-	 * @param 	radius
-	 * @return 	Mass of the worm if and only if the radius is not too small for the given worm.
-	 * 		|	result == new.getMass = (rho * (4 / 3) * Math.PI * Math.pow(radius, 3))
-	 * @throws	IllegalArgumentException
-	 * 		|	! canHaveAsRadius(radius)
-	 */
-	
-	public double calculateMass() throws IllegalArgumentException {
-		double rho = calculateRho(radius);
-		if (this.canHaveAsRadius(radius)){
-			return (rho * (4 / 3) * Math.PI * Math.pow(radius, 3));}			
-		else 
-			throw new IllegalArgumentException("Too small radius");
-	}
+	 * Variable registering the current number of action points of this worm.
+	 */	
+	int numberOfActionPoints;
 		
-	public void changeNumberOfActionPoints(int usedActionPoints){
-		setNumberOfActionPoints((numberOfActionPoints - usedActionPoints));
-	}
+
+
 	
-	/**
-	 * 
-	 * @param 	radius
-	 * @return	True if and only if the radius of the worm is bigger than .25m.
-	 * 		|	result == this.canHaveAsRadius(radius)
-	 */
-	
-	public boolean canHaveAsRadius(double radius){
-		if (radius > lowerBoundOfRadius)
-			return true;
-		else 
-			return false;
-	}
-	/**
-	 * 
-	 * @return	maxNumberOfActionPoints if and only if the mass of the worm exists.
-	 */
-	
-	
-	public void calculateMaxNumberOfActionPoints(){
-		int roundedMass = 0;
-		if (this.getMass() == 0.00 || this.getMass() < 0.00)
-			setMaxNumberOfActionPoints(roundedMass);  
-		else roundedMass = (int) Math.round(this.getMass());
-			setMaxNumberOfActionPoints(roundedMass);
-	}
+
+
 	/**
 	 * 
 	 * @param	numberOfSteps
