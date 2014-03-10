@@ -293,7 +293,14 @@ public class Worm {
 	/**
 	 * 
 	 * @param	numberOfSteps
-	 * @throws 	IllegalArgumentException
+	 * 			The number of steps to be taken in this direction.
+	 * @post	The new X-coordinate of the worm is equal to the old X-coordinate plus the cosinus of the direction, multiplied by the number of steps.
+	 * 		|	new.getX() == this.getX() + Math.cos(direction)*numberOfSteps
+	 * @post	The new Y-coordinate of the worm is equal to the old Y-coordinate plus the cosinus of the direction, multiplied by the number of steps.
+	 * 		|	new.getY() == this.getY() + Math.sin(direction)*numberOfSteps
+	 * @throws 	IllegalArgumentException("Number of steps is too small!")
+	 * 			The given number of steps is smaller than or equal to zero.
+	 * 		|	! numberOfSteps > 0
 	 */
 	public void move(int numberOfSteps) throws IllegalArgumentException {
 		if (numberOfSteps > 0)
@@ -303,31 +310,84 @@ public class Worm {
 			}
 		else throw new IllegalArgumentException("You didn't move the worm");
 	}
+		
+	
 	/**
 	 * 
-	 * @param	turnByAngle
-	 * @pre		
-	 *
+	 * @param 	turnByAngle
+	 * @pre		The given angle should be different from zero.
+	 * 		|	! turnByAngle == 0
+	 * @post	The new direction is equal to the old direction plus the given angle.
+	 * 		|	new.getDirection() == this.getDirection() + turnByAngle
 	 */
 	public void turn(double turnByAngle){
+		assert  turnByAngle > 0 || turnByAngle < 0;
 		setDirection(direction + turnByAngle);
 	}
 	
-	public void payAmountOfActionPointsForMoving(int numberOfSteps ){
+	/**
+	 * 
+	 * @param 	numberOfSteps
+	 * @post	The new number of action points equals the old number of action points reduced with the number of steps times the weighted direction.
+	 * 		|	new.getNumberOfActionPoints() == this.getNumberOfActionPoints - numberOfSteps*(Math.cos(direction) + 4 * Math.sin(direction))
+	 * @throws 	IllegalArgumentException("Number of steps is too small!")
+	 * 			The given number of steps is smaller than or equal to zero.
+	 * 		|	! numberOfSteps > 0
+	 */
+	public void payAmountOfActionPointsForMoving(int numberOfSteps ) throws IllegalArgumentException {
+		if (numberOfSteps > 0)
 		setNumberOfActionPoints(numberOfActionPoints - numberOfSteps * ( (int) Math.ceil(Math.cos(direction) + 4 * Math.sin(direction))));
+		else throw new IllegalArgumentException("You didn't move the worm");
 	}
 	
+	
+	/**
+	 * 
+	 * @param 	turnByAngle
+	 * @pre		The given angle should be different from zero.
+	 * 		|	! turnByAngle == 0
+	 * @post	The new direction is equal to the old direction plus the given angle.
+	 * 		|	new.getDirection() == this.getDirection() + turnByAngle	
+	 * 
+	 */
 	public void payAmountOfActionPointsForTurning(double turnByAngle){
+		assert  turnByAngle > 0 || turnByAngle < 0;
 		setNumberOfActionPoints(numberOfActionPoints - (int) Math.ceil((turnByAngle ) * (60/ 2 * Math.PI)));
 	}
 	
-	public void takeActiveStep(int numberOfSteps){
+	
+	/** @param 	numberOfSteps
+	 * @post	The new number of action points equals the old number of action points reduced with the number of steps times the weighted direction.
+	 * 		|	new.getNumberOfActionPoints() == this.getNumberOfActionPoints - numberOfSteps*(Math.cos(direction) + 4 * Math.sin(direction))
+	 * @throws 	IllegalArgumentException("Number of steps is too small!")
+	 * 			The given number of steps is smaller than or equal to zero.
+	 * 		|	! numberOfSteps > 0
+	 */
+	public void takeActiveStep(int numberOfSteps) throws IllegalArgumentException {
+		if (numberOfSteps > 0){
 		move(numberOfSteps);
-		payAmountOfActionPointsForMoving(numberOfSteps);
+		payAmountOfActionPointsForMoving(numberOfSteps);}
+		
+		else {
+				throw new IllegalArgumentException("You didn't move the worm");
+		}
+		
 	}
 	
+	
+	/**
+	 * 
+	 * @param 	turnByAngle
+	 * @pre		The given angle should be different from zero.
+	 * 		|	! turnByAngle == 0
+	 * @post	The new direction is equal to the old direction plus the given angle.
+	 * 		|	new.getDirection() == this.getDirection() + turnByAngle	
+	 * 
+	 */
 	public void takeActiveTurn( double turnByAngle){
-		turn(turnByAngle);
-		payAmountOfActionPointsForTurning(turnByAngle);
+		assert  turnByAngle > 0 || turnByAngle < 0;{
+			turn(turnByAngle);
+			payAmountOfActionPointsForTurning(turnByAngle);
+		}
 	}
 }
