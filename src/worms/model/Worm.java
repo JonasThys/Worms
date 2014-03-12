@@ -76,7 +76,7 @@ public class Worm {
 	 * 			starts with an uppercase letter and only contains letters, quotes and spaces.
 	 * 		|	result == (name.matches("[A-Z]"+"[A-Za-z\"\' ]+"))
 	 */
-	public static boolean isPossibleName(String name) {
+	private static boolean isPossibleName(String name) {
 		return name.matches("[A-Z]"+"[A-Za-z\"\' ]+");
 	}	
 	
@@ -120,7 +120,7 @@ public class Worm {
 	 * @post	The new x-coordinate of this worm is equal to the given x-coordinate.
 	 * 		|	new.getX() == x
 	 */
-	public void setX(double x) {
+	private void setX(double x) {
 		this.x = x;
 	}
 
@@ -147,7 +147,7 @@ public class Worm {
 	 * @post	The new y-coordinate of this worm is equal to the given y-coordinate.
 	 * 		|	new.getY() == y
 	 */
-	public void setY(double y) {
+	private void setY(double y) {
 		this.y = y;
 	}
 	
@@ -170,13 +170,30 @@ public class Worm {
 
 	 * @param	direction
 	 * 			The new direction of this worm.
-	 * @post	The new direction of this worm is equal to the given direction.
-	 * 		|	new.getDirection() == direction
+	 * @post	The new direction of this worm is similar to the given direction 
+	 * 			and is equal to its smallest representative angle that lies between zero and 2*pi, excluding the latter.
+	 * 		|	new.getDirection() == convertToRepresentativeAngle(direction)
 	 */
-	public void setDirection(double direction) {
-		this.direction = direction;
+	private void setDirection(double direction) {
+		this.direction = convertToRepresentativeAngle(direction);
 	}
 
+	/**
+	 * Convert the given angle to a representative angle that is equal to or greater than zero and smaller than two times pi radians.
+
+	 * @param	angle
+	 * 			The angle to be converted.
+	 * @return	The converted angle is a geometrically identical angle that lies between zero and two times pi, excluding the latter.
+	 * 		|	angle = result + (constant * 2 * pi)
+	 * 		|	0 <= result < (2 * pi)
+	 */	
+	private double convertToRepresentativeAngle(double angle){
+		while(angle < 0){
+			angle += 2 * Math.PI;
+		}
+		return (angle % (2 * Math.PI));
+	}
+	
 	/**
 	 * Variable registering the direction of this worm.
 	 */
@@ -199,7 +216,7 @@ public class Worm {
 	 * @return	True if and only if the given radius is not smaller than its lower bound.
 	 * 		|	result == (radius >= lowerBoundOfRadius)
 	 */
-	public boolean isPossibleRadius(double radius){
+	private boolean isPossibleRadius(double radius){
 		return radius >= lowerBoundOfRadius;
 	}
 	
@@ -235,7 +252,7 @@ public class Worm {
 	 * @return	Maximum number of action points of the worm based on calculations involving the mass of the worm.
 	 */
 	@Raw
-	private int getMaxNumberOfActionPoints(){
+	public int getMaxNumberOfActionPoints(){
 		return (int) Math.round(this.getMass());
 	}	
 
@@ -272,7 +289,7 @@ public class Worm {
 	 * 		|	else if (numberOfActionPoints < 0) new.getNumberOfActionPoints == 0
 	 * 		|	else if (numberOfActionPoints > this.getMaxNumberOfActionPoints()) new.getNumberOfActionPoints == this.getMaxNumberOfActionPoints
 	 */
-	public void setNumberOfActionPoints(int numberOfActionPoints) throws IllegalArgumentException {
+	private void setNumberOfActionPoints(int numberOfActionPoints) throws IllegalArgumentException {
 		if(numberOfActionPoints < 0)
 			numberOfActionPoints = 0;
 		else if(numberOfActionPoints > this.getMaxNumberOfActionPoints())
@@ -283,111 +300,163 @@ public class Worm {
 	/**
 	 * Variable registering the current number of action points of this worm.
 	 */	
-	int numberOfActionPoints;
+	private int numberOfActionPoints;
 		
-
-
-	
-
-
 	/**
+	 * Check whether the given number of steps is a possible number of steps for any worm.
 	 * 
 	 * @param	numberOfSteps
-	 * 			The number of steps to be taken in this direction.
-	 * @post	The new X-coordinate of the worm is equal to the old X-coordinate plus the cosinus of the direction, multiplied by the number of steps.
-	 * 		|	new.getX() == this.getX() + Math.cos(direction)*numberOfSteps
-	 * @post	The new Y-coordinate of the worm is equal to the old Y-coordinate plus the cosinus of the direction, multiplied by the number of steps.
-	 * 		|	new.getY() == this.getY() + Math.sin(direction)*numberOfSteps
-	 * @throws 	IllegalArgumentException("Number of steps is too small!")
-	 * 			The given number of steps is smaller than or equal to zero.
-	 * 		|	! numberOfSteps > 0
+	 * 			The number of steps to check.
+	 * @return	True if and only if the given number of steps is not smaller than zero.
+	 * 		|	result == (numberOfSteps >= 0)
 	 */
-	public void move(int numberOfSteps) throws IllegalArgumentException {
-		if (numberOfSteps > 0)
-			for (int i=1; i	< numberOfSteps + 1; i++){
-				setX(x + Math.cos(direction));
-				setY(y + Math.sin(direction));
-			}
-		else throw new IllegalArgumentException("You didn't move the worm");
+	private boolean isPossibleNumberOfSteps(int numberOfSteps){
+		return numberOfSteps >= 0;
 	}
-		
-	
+
 	/**
-	 * 
-	 * @param 	turnByAngle
-	 * @pre		The given angle should be different from zero.
-	 * 		|	! turnByAngle == 0
-	 * @post	The new direction is equal to the old direction plus the given angle.
-	 * 		|	new.getDirection() == this.getDirection() + turnByAngle
-	 */
-	public void turn(double turnByAngle){
-		assert  turnByAngle > 0 || turnByAngle < 0;
-		setDirection(direction + turnByAngle);
-	}
-	
-	/**
+	 * Return the amount of action points this worm has to pay for moving the given number of steps.
 	 * 
 	 * @param 	numberOfSteps
-	 * @post	The new number of action points equals the old number of action points reduced with the number of steps times the weighted direction.
-	 * 		|	new.getNumberOfActionPoints() == this.getNumberOfActionPoints - numberOfSteps*(Math.cos(direction) + 4 * Math.sin(direction))
-	 * @throws 	IllegalArgumentException("Number of steps is too small!")
-	 * 			The given number of steps is smaller than or equal to zero.
-	 * 		|	! numberOfSteps > 0
+	 * 			The number of steps to be taken by the worm in the current direction.
+	 * @return	The amount of action points to be paid equals the number of steps times the weighted direction.
+	 * 		|	result == numberOfSteps*(ceil(abs(cos(direction))+abs(4*sin(direction))))
+	 * @throws 	IllegalArgumentException("Invalid number of steps!")
+	 * 			The given number of steps is not a possible number of steps for any worm.
+	 * 		|	! isPossibleNumberOfSteps(numberOfSteps)
 	 */
-	public void payAmountOfActionPointsForMoving(int numberOfSteps ) throws IllegalArgumentException {
-		if (numberOfSteps > 0)
-		setNumberOfActionPoints(numberOfActionPoints - numberOfSteps * ( (int) Math.ceil(Math.cos(direction) + 4 * Math.sin(direction))));
-		else throw new IllegalArgumentException("You didn't move the worm");
+	private int amountOfActionPointsForMoving(int numberOfSteps ) throws IllegalArgumentException {
+		if (!isPossibleNumberOfSteps(numberOfSteps)) 
+			throw new IllegalArgumentException("Invalid number of steps!");
+		double horizontalComponent = Math.abs(Math.cos(direction));
+		double verticalComponent = Math.abs(4 * Math.sin(direction));
+		int decrement = (int) Math.ceil(horizontalComponent + verticalComponent);
+		return (numberOfSteps * decrement);
 	}
-	
-	
+
 	/**
+	 * Check whether the worm can move the given number of steps.
 	 * 
-	 * @param 	turnByAngle
-	 * @pre		The given angle should be different from zero.
-	 * 		|	! turnByAngle == 0
-	 * @post	The new direction is equal to the old direction plus the given angle.
-	 * 		|	new.getDirection() == this.getDirection() + turnByAngle	
+	 * @param	numberOfSteps
+	 * 			The number of steps to be taken by the worm in the current direction.
+	 * @return	True if and only if the current number of action points is not smaller than the amount of action points required to move the worm with the given number of steps.
+	 * 		|	result == (numberOfActionPoints >= amountOfActionPointsForMoving(numberOfSteps))
+	 */	
+	public boolean canMove(int numberOfSteps) throws IllegalArgumentException {
+		if (! isPossibleNumberOfSteps(numberOfSteps))
+			throw new IllegalArgumentException("Invalid number of steps!");
+		return (numberOfActionPoints >= amountOfActionPointsForMoving(numberOfSteps));
+	}
+
+	/**
+	 * Move this worm in the current direction for the given number of steps.
 	 * 
+	 * @param	numberOfSteps
+	 * 			The number of steps to be taken by the worm in the current direction.
+	 * @post	The new X-coordinate of the worm is equal to the old X-coordinate plus the cosinus of the angle of the current direction, multiplied by the number of steps and the radius of this worm.
+	 * 		|	new.getX() == this.getX() + Math.cos(direction)*numberOfSteps*radius
+	 * @post	The new Y-coordinate of the worm is equal to the old Y-coordinate plus the sinus of the angle of the current direction, multiplied by the number of steps and the radius of this worm.
+	 * 		|	new.getY() == this.getY() + Math.sin(direction)*numberOfSteps*radius
+	 * @throws 	IllegalArgumentException("Number of steps is too small!")
+	 * 			The given number of steps is not a valid number of steps for any worm.
+	 * 		|	! isPossibleNumberOfSteps(numberOfSteps)
 	 */
-	public void payAmountOfActionPointsForTurning(double turnByAngle){
-		assert  turnByAngle > 0 || turnByAngle < 0;
-		setNumberOfActionPoints(numberOfActionPoints - (int) Math.ceil((turnByAngle ) * (60/ 2 * Math.PI)));
+	private void move(int numberOfSteps) throws IllegalArgumentException {
+		if (!isPossibleNumberOfSteps(numberOfSteps)) 
+			throw new IllegalArgumentException("Invalid number of steps!");
+		double incrementX = Math.cos(direction) * radius;
+		double incrementY = Math.sin(direction) * radius;
+		double newX = x + (numberOfSteps * incrementX);
+		double newY = y + (numberOfSteps * incrementY);
+		this.setX(newX);
+		this.setY(newY);
 	}
 	
-	
-	/** @param 	numberOfSteps
-	 * @post	The new number of action points equals the old number of action points reduced with the number of steps times the weighted direction.
-	 * 		|	new.getNumberOfActionPoints() == this.getNumberOfActionPoints - numberOfSteps*(Math.cos(direction) + 4 * Math.sin(direction))
-	 * @throws 	IllegalArgumentException("Number of steps is too small!")
-	 * 			The given number of steps is smaller than or equal to zero.
-	 * 		|	! numberOfSteps > 0
+	/** 
+	 * Move this worm while paying the appropriate amount of action points.
+	 * 
+	 * @param 	numberOfSteps
+	 * 			The number of steps to be taken by the worm in the current direction.
+	 * @post	The new X-coordinate of the worm is equal to the old X-coordinate plus the cosinus of the angle of the current direction, multiplied by the number of steps and the radius of this worm.
+	 * 		|	new.getX() == this.getX() + Math.cos(direction)*numberOfSteps*radius
+	 * @post	The new Y-coordinate of the worm is equal to the old Y-coordinate plus the sinus of the angle of the current direction, multiplied by the number of steps and the radius of this worm.
+	 * 		|	new.getY() == this.getY() + Math.sin(direction)*numberOfSteps*radius
+	 * @post	The new number of action points equals the old number of action points reduced with the amount of action points to be paid for moving the given number of steps.
+	 * 		|	new.getNumberOfActionPoints() == this.getNumberOfActionPoints - amountOfActionPointsForMoving(numberOfSteps)
+	 * @throws 	IllegalArgumentException("Invalid number of steps!")
+	 * 			The given number of steps is not a possible number of steps for any worm.
+	 * 		|	! isPossibleNumberOfSteps(numberOfSteps)
+	 * @throws 	UnsupportedOperationException("Cannot move!")
+	 * 			The worm cannot move the given number of steps.
+	 * 		|	! canMove(numberOfSteps)
 	 */
-	public void takeActiveStep(int numberOfSteps) throws IllegalArgumentException {
-		if (numberOfSteps > 0){
+	public void activeMove(int numberOfSteps) throws IllegalArgumentException {
+		if (! isPossibleNumberOfSteps(numberOfSteps))
+			throw new IllegalArgumentException("Invalid number of steps!");
+		if (! canMove(numberOfSteps))
+			throw new UnsupportedOperationException("Cannot move!");
 		move(numberOfSteps);
-		payAmountOfActionPointsForMoving(numberOfSteps);}
-		
-		else {
-				throw new IllegalArgumentException("You didn't move the worm");
-		}
-		
+		setNumberOfActionPoints(numberOfActionPoints - amountOfActionPointsForMoving(numberOfSteps));
 	}
-	
-	
+		
 	/**
+	 * Return the amount of action points this worm has to pay to turn by the given angle.
 	 * 
 	 * @param 	turnByAngle
-	 * @pre		The given angle should be different from zero.
-	 * 		|	! turnByAngle == 0
-	 * @post	The new direction is equal to the old direction plus the given angle.
-	 * 		|	new.getDirection() == this.getDirection() + turnByAngle	
-	 * 
+	 * 			The angle by which this worm will be turned.
+	 * @pre		The representative angle of the given angle to turn by is not zero.
+	 * 		|	convertToRepresentativeAngle(turnByAngle) != 0
+	 * @return	The resulting amount of action points to be paid is equal to the quotient of 60 and a factor that is calculated by dividing 2 times pi by the converted representative angle.
+	 * 		|	result == ceil(60 / ((2*pi)/convertToRepresentativeAngle(turnByAngle)))	
 	 */
-	public void takeActiveTurn( double turnByAngle){
-		assert  turnByAngle > 0 || turnByAngle < 0;{
-			turn(turnByAngle);
-			payAmountOfActionPointsForTurning(turnByAngle);
-		}
+	private int amountOfActionPointsForTurning(double turnByAngle){
+		double factor = (2 * Math.PI) / convertToRepresentativeAngle(turnByAngle);
+		int decrement = (int) Math.ceil(60 / factor);
+		return decrement;
+	}
+
+	/**
+	 * Check whether the worm can turn by the given angle.
+	 * 
+	 * @param	turnByAngle
+	 * 			The angle by which this worm will be turned.
+	 * @pre		The representative angle of the given angle to turn by is not zero.
+	 * 		|	convertToRepresentativeAngle(turnByAngle) != 0
+	 * @return	True if and only if the current number of action points is not smaller than the amount of action points required to turn the worm by the given angle.
+	 * 		|	result == (numberOfActionPoints >= amountOfActionPointsForTurning(turnByAngle))
+	 */
+	public boolean canTurn(double turnByAngle){
+		return (numberOfActionPoints >= amountOfActionPointsForTurning(turnByAngle));
+	}
+
+	/**
+	 * Turn the direction of this worm by the given angle.
+	 * 
+	 * @param 	turnByAngle
+	 * 			The angle by which this worm will be turned.
+	 * @post	The new direction of this worm is similar to the old direction incremented with the given angle
+	 * 			and is equal to its smallest representative angle that lies between zero and 2*pi, excluding the latter.
+	 * 		|	new.getDirection() == convertToRepresentativeAngle(this.getDirection() + turnByAngle)
+	 */
+	private void turn(double turnByAngle){
+		setDirection(convertToRepresentativeAngle(direction + turnByAngle));
+	}
+	
+	/**
+	 * Turn this worm while paying the appropriate amount of action points.
+	 * 
+	 * @param 	turnByAngle
+	 * 			The angle by which this worm will be turned.
+	 * @pre		This worm can turn by the given angle.
+	 * 		|	this.canTurn(turnByAngle)
+	 * @post	The new number of action points equals the old number of action points reduced with the amount of action points to be paid for turning by the given angle.
+	 * 		|	new.getNumberOfActionPoints() == this.getNumberOfActionPoints - amountOfActionPointsForTurning(turnByAngle)
+	 * @post	The new direction of this worm is similar to the old direction incremented with the given angle
+	 * 			and is equal to its smallest representative angle that lies between zero and 2*pi, excluding the latter.
+	 * 		|	new.getDirection() == convertToRepresentativeAngle(this.getDirection() + turnByAngle)
+	 */
+	public void activeTurn(double turnByAngle){
+		turn(turnByAngle);
+		setNumberOfActionPoints(numberOfActionPoints - amountOfActionPointsForTurning(turnByAngle));
 	}
 }
