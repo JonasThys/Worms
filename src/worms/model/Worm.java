@@ -95,7 +95,7 @@ public class Worm {
 	public void setName(String name) throws IllegalArgumentException {
 		if (!isPossibleName(name))
 			throw new IllegalArgumentException("Name is not valid!");
-		this.name = name;
+		else this.name = name;
 	}
 	
 	/**
@@ -244,7 +244,7 @@ public class Worm {
 	public void setRadius(double radius) throws IllegalArgumentException {
 		if (!isPossibleRadius(radius))
 			throw new IllegalArgumentException("Radius is too small!");
-		this.radius = radius;
+		else this.radius = radius;
 	}
 
 	/**
@@ -338,10 +338,12 @@ public class Worm {
 	private int amountOfActionPointsForMoving(int numberOfSteps ) throws IllegalArgumentException {
 		if (!isPossibleNumberOfSteps(numberOfSteps)) 
 			throw new IllegalArgumentException("Invalid number of steps!");
-		double horizontalComponent = Math.abs(Math.cos(direction));
-		double verticalComponent = Math.abs(4 * Math.sin(direction));
-		int decrement = (int) Math.ceil(horizontalComponent + verticalComponent);
-		return (numberOfSteps * decrement);
+		else {
+			double horizontalComponent = Math.abs(Math.cos(direction));
+			double verticalComponent = Math.abs(4 * Math.sin(direction));
+			int decrement = (int) Math.ceil(horizontalComponent + verticalComponent);
+			return (numberOfSteps * decrement);
+		}
 	}
 
 	/**
@@ -358,7 +360,7 @@ public class Worm {
 	public boolean canMove(int numberOfSteps) throws IllegalArgumentException {
 		if (! isPossibleNumberOfSteps(numberOfSteps))
 			throw new IllegalArgumentException("Invalid number of steps!");
-		return (numberOfActionPoints >= amountOfActionPointsForMoving(numberOfSteps));
+		else return (numberOfActionPoints >= amountOfActionPointsForMoving(numberOfSteps));
 	}
 
 	/**
@@ -377,12 +379,14 @@ public class Worm {
 	private void move(int numberOfSteps) throws IllegalArgumentException {
 		if (!isPossibleNumberOfSteps(numberOfSteps)) 
 			throw new IllegalArgumentException("Invalid number of steps!");
-		double incrementX = Math.cos(direction) * radius;
-		double incrementY = Math.sin(direction) * radius;
-		double newX = x + (numberOfSteps * incrementX);
-		double newY = y + (numberOfSteps * incrementY);
-		setX(newX);
-		setY(newY);
+		else {
+			double incrementX = Math.cos(direction) * radius;
+			double incrementY = Math.sin(direction) * radius;
+			double newX = x + (numberOfSteps * incrementX);
+			double newY = y + (numberOfSteps * incrementY);
+			setX(newX);
+			setY(newY);
+		}
 	}
 	
 	/** 
@@ -400,11 +404,13 @@ public class Worm {
 	 * 			The worm cannot move the given number of steps.
 	 * 		|	! canMove(numberOfSteps)
 	 */
-	public void activeMove(int numberOfSteps) throws IllegalArgumentException {
+	public void activeMove(int numberOfSteps) throws UnsupportedOperationException {
 		if (! canMove(numberOfSteps))
 			throw new UnsupportedOperationException("Cannot move!");
-		move(numberOfSteps);
-		setNumberOfActionPoints(numberOfActionPoints - amountOfActionPointsForMoving(numberOfSteps));
+		else {
+			move(numberOfSteps);
+			setNumberOfActionPoints(numberOfActionPoints - amountOfActionPointsForMoving(numberOfSteps));
+		}
 	}
 		
 	/**
@@ -414,11 +420,17 @@ public class Worm {
 	 * 			The angle by which this worm will be turned.
 	 * @pre		The representative angle of the given angle to turn by is not zero.
 	 * 		|	convertToRepresentativeAngle(turnByAngle) != 0
-	 * @return	The resulting amount of action points to be paid is equal to the quotient of 60 and a factor that is calculated by dividing 2 times pi by the converted representative angle.
-	 * 		|	result == ceil(60 / ((2*pi)/convertToRepresentativeAngle(turnByAngle)))	
+	 * @return	The resulting amount of action points to be paid is equal to the quotient of 60 and a factor that is calculated by dividing 2 times pi by the effective angle.
+	 * 			This effective angle is equal to the converted representative angle if it is not greater than pi, else it is equal to its radian complement.
+	 * 		|	result == ceil(60 / ((2*pi)/effectiveAngle))	
+	 * 		|	if (convertToRepresentativeAngle(turnByAngle) > (2 * pi)) effectiveAngle == (2 * Math.PI) - convertToRepresentativeAngle(turnByAngle)
+	 * 		|	else effectiveAngle == convertToRepresentativeAngle(turnByAngle)
 	 */
 	private int amountOfActionPointsForTurning(double turnByAngle){
-		double factor = (2 * Math.PI) / convertToRepresentativeAngle(turnByAngle);
+		double effectiveAngle = convertToRepresentativeAngle(turnByAngle);
+		if(effectiveAngle > Math.PI)
+			effectiveAngle = (2 * Math.PI) - effectiveAngle;
+		double factor = (2 * Math.PI) / effectiveAngle;
 		int decrement = (int) Math.ceil(60 / factor);
 		return decrement;
 	}
@@ -563,8 +575,10 @@ public class Worm {
 	public void jump(){
 		if(! canJump())
 			throw new UnsupportedOperationException("Cannot jump!");
-		setX(jumpStepOnXAxis(jumpTime()));
-		setNumberOfActionPoints(0);
+		else {
+			setX(jumpStepOnXAxis(jumpTime()));
+			setNumberOfActionPoints(0);
+		}
 	}
 	
 	/**

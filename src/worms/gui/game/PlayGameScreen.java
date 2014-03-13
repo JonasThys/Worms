@@ -84,10 +84,12 @@ public class PlayGameScreen extends Screen {
 				break;
 			case KeyEvent.VK_PLUS:
 			case KeyEvent.VK_ADD:
+			case KeyEvent.VK_P:
 				resizeWorm(true);
 				break;
 			case KeyEvent.VK_MINUS:
 			case KeyEvent.VK_SUBTRACT:
+			case KeyEvent.VK_M:
 				resizeWorm(false);
 				break;
 			default:
