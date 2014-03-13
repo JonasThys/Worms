@@ -3,18 +3,33 @@ package worms.model;
 public class Facade implements IFacade {
 
 	@Override
-	public Worm createWorm(double x, double y, double direction, double radius, String name) {
-		return new Worm(name,radius,direction,x,y);
+	public Worm createWorm(double x, double y, double direction, double radius, String name) throws ModelException {
+		try{
+			return new Worm(name,radius,direction,x,y);
+		}
+		catch (Throwable exc){
+			throw new ModelException(exc.getMessage());
+		}
 	}
 
 	@Override
-	public boolean canMove(Worm worm, int nbSteps) {
-		return worm.canMove(nbSteps);
+	public boolean canMove(Worm worm, int nbSteps) throws ModelException {
+		try{
+			return worm.canMove(nbSteps);
+		}
+		catch (Throwable exc){
+			throw new ModelException(exc.getMessage());
+		}
 	}
 
 	@Override
-	public void move(Worm worm, int nbSteps) {
-		worm.activeMove(nbSteps);
+	public void move(Worm worm, int nbSteps) throws ModelException {
+		try{
+			worm.activeMove(nbSteps);
+		}
+		catch (Throwable exc){
+			throw new ModelException(exc.getMessage());
+		}
 	}
 
 	@Override
@@ -28,8 +43,13 @@ public class Facade implements IFacade {
 	}
 
 	@Override
-	public void jump(Worm worm) {
-		worm.jump();
+	public void jump(Worm worm) throws ModelException {
+		try{
+			worm.jump();
+		}
+		catch (Throwable exc){
+			throw new ModelException(exc.getMessage());
+		}
 	}
 
 	@Override
@@ -63,8 +83,13 @@ public class Facade implements IFacade {
 	}
 
 	@Override
-	public void setRadius(Worm worm, double newRadius) {
-		worm.setRadius(newRadius);
+	public void setRadius(Worm worm, double newRadius) throws ModelException {
+		try{
+			worm.setRadius(newRadius);
+		}
+		catch (Throwable exc){
+			throw new ModelException(exc.getMessage());
+		}
 	}
 
 	@Override
@@ -88,8 +113,13 @@ public class Facade implements IFacade {
 	}
 
 	@Override
-	public void rename(Worm worm, String newName) {
-		worm.setName(newName);
+	public void rename(Worm worm, String newName) throws ModelException {
+		try{
+			worm.setName(newName);
+		}
+		catch (Throwable exc){
+			throw new ModelException(exc.getMessage());
+		}
 	}
 
 	@Override

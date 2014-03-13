@@ -299,7 +299,7 @@ public class Worm {
 	 * 		|	else if (numberOfActionPoints < 0) new.getNumberOfActionPoints == 0
 	 * 		|	else if (numberOfActionPoints > this.getMaxNumberOfActionPoints()) new.getNumberOfActionPoints == this.getMaxNumberOfActionPoints
 	 */
-	private void setNumberOfActionPoints(int numberOfActionPoints) throws IllegalArgumentException {
+	private void setNumberOfActionPoints(int numberOfActionPoints){
 		if(numberOfActionPoints < 0)
 			numberOfActionPoints = 0;
 		else if(numberOfActionPoints > this.getMaxNumberOfActionPoints())
