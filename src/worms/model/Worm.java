@@ -208,6 +208,15 @@ public class Worm {
 	public double getRadius() {
 		return radius;
 	}
+	
+	/**
+	 * Return the lower bound of the radius of the worm.
+	 * 	The lower bound of the radius expresses the lower bound of the radius of the spherical body of the worm.
+	 */
+	@Basic
+	public double getLowerBoundOfRadius() {
+		return lowerBoundOfRadius;
+	}
 
 	/**
 	 * Check whether the given radius is a possible radius for any worm.
