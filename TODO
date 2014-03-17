@@ -5,5 +5,10 @@ TESTS uitschrijven // gebeurd
 INVARIANTEN toevoegen
 
 
-Bij testen: Ik kan geen Worm aanmaken wiens actiepunten zo laag zijn, zodat de grootst mogelijke draai te duur zou zijn. Gij een idee?
-Bij testen: Ik heb alle testen gedubbelchecked en plan dit dinsdagavond nog eens te doen. 
+Testen
+
+- Ik kan geen Worm aanmaken wiens actiepunten zo laag zijn, zodat de grootst mogelijke draai te duur zou zijn. Gij een idee? Das ni mogelijk omdat de MaxActionPoints minimum 20*pi zijn en de gebruikte action points maximum 60. Dus eigelijk kunnen we van die test best gewoon een comment maken, maar misschien eerst is vragen aan de consultant.
+- Ik heb alle testen gedubbelchecked en plan dit dinsdagavond nog eens te doen.
+Ge krijgt foutmeldingen omdat ge geen delta opgeeft bij die doorstreepte asserts, dus da moet zeker nog aangepast worden.
+- Zelfde delta als in hulpklasse gebruiken voor assertequals(double,double)?
+- Alle soorten invalid inputs aflopen of slechts 1?

@@ -10,7 +10,7 @@ import org.junit.*;
  * 
  * A class collecting tests for the class of worms.
  * 
- * @versio 1.0
+ * @version 1.0
  * @author Jonas Thys and Jeroen Reinenbergh
  * 
  *
@@ -30,9 +30,9 @@ private static Worm worm1, worm2, worm3;
  * Set up a mutable test fixture
  * 
  * @post The variables worm1, worm2, worm3 reference to new worms.
- *		 worm1 is named Jonas and has a radius of 2, direction of 3.045, and postion (0,0)
- *		 worm2 is named Jeroen and has a radius of 0.25, direction of 4, and postion (2,1.75)
- *		 worm3 is named Fred and has a radius of 10, direction of -2.3, and postion (-3.75,-1.5)
+ *		 worm1 is named Jonas and has a radius of 2, direction of 3.045, and position (0,0)
+ *		 worm2 is named Jeroen and has a radius of 0.25, direction of 4, and position (2,1.75)
+ *		 worm3 is named Fred and has a radius of 10, direction of -2.3, and position (-3.75,-1.5)
  * 
  */
 @Before
@@ -104,7 +104,7 @@ public void canMoveWithNegativeNumberOfSteps(){
  */
 @Test
 public void canMoveWithTooBigNumberOfSteps(){
-	assertFalse(worm1.canMove(17795));
+	assertFalse(worm1.canMove(Integer.MAX_VALUE));
 }
 
 /**
@@ -124,7 +124,7 @@ public void activeValidMove(){
 @SuppressWarnings("deprecation")
 @Test
 public void activeTooBigMove(){
-	worm1.activeMove(17795);
+	worm1.activeMove(Integer.MAX_VALUE);
 	assertEquals(0.0, worm1.getX());
 	assertEquals(0.0, worm1.getY());
 	assertEquals(35588, worm1.getNumberOfActionPoints());
