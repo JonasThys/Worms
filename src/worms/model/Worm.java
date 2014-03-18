@@ -533,7 +533,7 @@ public class Worm {
 	 * 		|	result == y + ((initialVelocity() * Math.sin(direction) * timePassed) - ((1/2) * standardAcceleration * timePassed^2))
 	 */		
 	private double jumpStepOnYAxis(double timePassed){
-		return (y + ((initialVelocity() * Math.sin(direction) * timePassed) - ((1/2) * standardAcceleration * Math.pow(timePassed, 2))));
+		return (y + ((initialVelocity() * Math.sin(direction) * timePassed) - ((0.5) * standardAcceleration * Math.pow(timePassed, 2))));
 	}	
 	
 	/**
