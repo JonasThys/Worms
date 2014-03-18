@@ -3,7 +3,6 @@ package worms;
 import worms.gui.GUIOptions;
 import worms.gui.WormsGUI;
 import worms.model.Facade;
-import worms.model.Worm;
 
 public class Worms {
 

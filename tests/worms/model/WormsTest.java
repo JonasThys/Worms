@@ -23,7 +23,7 @@ public class WormsTest {
 /**
  * Variable referencing a mutable worm.
  */
-private static Worm worm1, worm2;
+private static Worm worm1;
 
 /**
  * Variables referencing immutable worms.
@@ -39,7 +39,6 @@ private static Worm worm3, worm4;
 @Before
 public void setUpMutableFixture() throws Exception {
 	worm1 = new Worm("Rocky", 2, 3.045, 0, 0);
-	worm2 = new Worm("Frenzy", 0.25, 4, 0, 0);
 }
 
 
@@ -82,10 +81,30 @@ public void constructor_RadiusTooSmall() throws Exception {
 	new Worm("Joske",0.1,3,2,1);
 }
 
+@Test (expected = IllegalArgumentException.class)
+public void constructor_RadiusNotANumber() throws Exception {
+	new Worm("Joske",Double.NaN,3,2,1);
+}
+
 @Test
 public void constructor_DirectionNotBetweenZeroAnd2Pi() throws Exception {
 	Worm myWorm = new Worm("Joske",4,(3 * Math.PI),2,1);
 	assertEquals(Math.PI,myWorm.getDirection(),Util.DEFAULT_EPSILON);
+}
+
+@Test (expected = IllegalArgumentException.class)
+public void constructor_DirectionNotANumber() throws Exception {
+	new Worm("Joske",4,Double.NaN,2,1);
+}
+
+@Test (expected = IllegalArgumentException.class)
+public void constructor_XCoordinateNotANumber() throws Exception {
+	new Worm("Joske",4,3,Double.NaN,1);
+}
+
+@Test (expected = IllegalArgumentException.class)
+public void constructor_YCoordinateNotANumber() throws Exception {
+	new Worm("Joske",4,3,2,Double.NaN);
 }
 
 @Test
@@ -110,16 +129,6 @@ public void setName_InvalidCharacters() throws Exception {
 }
 
 @Test
-public void getRadius() {
-	assertEquals(6, worm3.getRadius(), Util.DEFAULT_EPSILON);
-}
-
-@Test
-public void getLowerBoundOfRadius() {
-	assertEquals(0.25, worm3.getLowerBoundOfRadius(), Util.DEFAULT_EPSILON);
-}
-
-@Test
 public void setRadius_LegalCase() throws Exception {
 	worm1.setRadius(3);
 	assertEquals(3, worm1.getRadius(), Util.DEFAULT_EPSILON);
@@ -127,10 +136,13 @@ public void setRadius_LegalCase() throws Exception {
 
 @Test (expected = IllegalArgumentException.class)
 public void setRadius_RadiusTooSmall() throws Exception {
-	worm1.setRadius(0.1);
-	assertEquals(2, worm1.getRadius(), Util.DEFAULT_EPSILON);
+	worm3.setRadius(0.1);
 }
 
+@Test (expected = IllegalArgumentException.class)
+public void setRadius_RadiusNotANumber() throws Exception {
+	worm3.setRadius(Double.NaN);
+}
 
 @Test
 public void getMass() {
@@ -190,11 +202,9 @@ public void activeTurn_LegalCase() {
 
 @Test
 public void activeTurn_CannotTurn() {
-	for (int i = 1; i < 4; i++){
-	if (worm2.canTurn(Math.PI)){
-	worm2.activeTurn(Math.PI);}}
-	assertEquals(4, worm2.getDirection(), Util.DEFAULT_EPSILON);
-	assertEquals(10, worm2.getNumberOfActionPoints());
+	worm1.jump();
+	assertEquals(3.045, worm1.getDirection(), Util.DEFAULT_EPSILON);
+	assertEquals(0, worm1.getNumberOfActionPoints());
 }
 
 @Test

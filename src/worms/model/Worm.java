@@ -57,12 +57,21 @@ public class Worm {
 	 * 		|	new.getY() = y
 	 * @post	The new current number of action points of this worm is equal to the maximum number of action points of this worm.
 	 * 		|	new.getNumberOfActionPoints() = new.getMaxNumberOfActionPoints()
-	 * @throws 	IllegalArgumentException("Radius is too small!")
-	 * 			The given radius is too small for any worm.
+	 * @throws 	IllegalArgumentException("Invalid radius!")
+	 * 			The given radius is not a possible radius for any worm.
 	 * 		|	! isPossibleRadius(radius)
 	 * @throws 	IllegalArgumentException("Name is not valid!")
 	 * 			The given name is not a valid name for any worm.
 	 * 		|	! isPossibleName(name)
+	 * @throws 	IllegalArgumentException("Invalid number!")
+	 * 			The given direction is not a valid direction for any worm.
+	 * 		|	! isPossibleNumber(direction)
+	 * @throws 	IllegalArgumentException("Invalid number!")
+	 * 			The given x-coordinate is not a valid number for any worm.
+	 * 		|	! isPossibleNumber(x)
+	 * @throws 	IllegalArgumentException("Invalid number!")
+	 * 			The given y-coordinate is not a valid number for any worm.
+	 * 		|	! isPossibleNumber(y)
 	 * 
 	 */
 	
@@ -146,11 +155,11 @@ public class Worm {
 	 * @param	number
 	 * 			The number to check.
 	 * @return	True if and only if the given number is not categorized as Not A Number in Double-representation.
-	 * 		|	result == (number != Double.NaN)
+	 * 		|	result == (!Double.isNaN(number))
 	 */
 	@Model
 	private static boolean isPossibleNumber(Double number) {
-		return (number != Double.NaN);
+		return (!Double.isNaN(number));
 	}
 
 	/**
@@ -283,13 +292,13 @@ public class Worm {
 	 * 			The new radius of this worm.
 	 * @post	The new radius of this worm is equal to the given radius.
 	 * 		|	new.getRadius() == radius
-	 * @throws 	IllegalArgumentException("Radius is too small!")
-	 * 			The given radius is too small for any worm.
+	 * @throws 	IllegalArgumentException("Invalid radius!")
+	 * 			The given radius is not a possible radius for any worm.
 	 * 		|	! isPossibleRadius(radius)
 	 */
 	public void setRadius(double radius) throws IllegalArgumentException {
 		if (!isPossibleRadius(radius))
-			throw new IllegalArgumentException("Radius is too small!");
+			throw new IllegalArgumentException("Invalid radius!");
 		else this.radius = radius;
 	}
 
