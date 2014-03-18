@@ -12,6 +12,12 @@ import worms.util.*;
  * 		|	isPossibleName(getName())
  * @invar	Each worm can have its radius as its radius.
  * 		|	isPossibleRadius(getRadius())
+ * @invar	Each worm can have its mass as its mass.
+ * 		|	getMass() > 0
+ * @invar	Each worm can have its number of action points as its number of action points;
+ * 		|	0 < getNumberOfActionPoints() < getMaxNumberOfActionPoints()
+ * @invar	Each worm can have its direction as its direction.
+ * 		|	0 < getDirection() < pi
  * 
  * 
  * @version 1.0
@@ -383,7 +389,7 @@ public class Worm {
 	 * 		|	! isPossibleNumberOfSteps(numberOfSteps)
 	 */
 	private void move(int numberOfSteps) throws IllegalArgumentException {
-		if (!isPossibleNumberOfSteps(numberOfSteps)) 
+		if (!canMove(numberOfSteps)) 
 			throw new IllegalArgumentException("Invalid number of steps!");
 		else {
 			double incrementX = Math.cos(direction) * radius;
