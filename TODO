@@ -7,21 +7,5 @@ Vragen hoe we invarianten formeel bewijzen.
 Deze toevoegen: direction tussen 0 en p, action points tussen 0 en max, mass positief
 
 
-Testen
-
-- Ik kan geen Worm aanmaken wiens actiepunten zo laag zijn, zodat de grootst mogelijke draai te duur zou zijn. Gij een idee? Das ni mogelijk omdat de MaxActionPoints minimum 20*pi zijn en de gebruikte action points maximum 60. Dus eigelijk kunnen we van die test best gewoon een comment maken, maar misschien eerst is vragen aan de consultant.
-- Ik heb alle testen gedubbelchecked en plan dit dinsdagavond nog eens te doen.
-Ge krijgt foutmeldingen omdat ge geen delta opgeeft bij die doorstreepte asserts, dus da moet zeker nog aangepast worden.
-- Zelfde delta als in hulpklasse gebruiken voor assertequals(double,double)?
-- Alle soorten invalid inputs aflopen of slechts 1?
-
-Vragen:
-- Invar: hoe formeel bewijzen?
-- Jump: Toch springen met negatieve hoek.
-- Delta gebruiken bij de tests?
-- Alles soorten invalid inputs aflopen of slechts 1?
-- Moeten wij DOCS meegeven?
-- Jarfile: werkt niet?
-- Waarom kost radius veranderen toch action points?
-- Hoe testresultaten interpreteren en verbeteren? Ligt het aan exception?
-- Worm met te weinig actiepunten om te draaien hoe regelen?
+@Model tags toevoegen
+NaN aan invarianten toevoegen

@@ -200,6 +200,7 @@ public class Worm {
 	 * 		|	angle = result + (constant * 2 * pi)
 	 * 		|	0 <= result < (2 * pi)
 	 */	
+	@Model
 	private double convertToRepresentativeAngle(double angle){
 		while(angle < 0){
 			angle += 2 * Math.PI;
@@ -389,7 +390,7 @@ public class Worm {
 	 * 		|	! isPossibleNumberOfSteps(numberOfSteps)
 	 */
 	private void move(int numberOfSteps) throws IllegalArgumentException {
-		if (!canMove(numberOfSteps)) 
+		if (!isPossibleNumberOfSteps(numberOfSteps)) 
 			throw new IllegalArgumentException("Invalid number of steps!");
 		else {
 			double incrementX = Math.cos(direction) * radius;
@@ -415,8 +416,11 @@ public class Worm {
 	 * @throws 	UnsupportedOperationException("Cannot move!")
 	 * 			The worm cannot move the given number of steps.
 	 * 		|	! canMove(numberOfSteps)
+	 * @throws 	IllegalArgumentException("Invalid number of steps!")
+	 * 			The given number of steps is not a possible number of steps for any worm.
+	 * 		|	! isPossibleNumberOfSteps(numberOfSteps)
 	 */
-	public void activeMove(int numberOfSteps) throws UnsupportedOperationException {
+	public void activeMove(int numberOfSteps) throws UnsupportedOperationException, IllegalArgumentException {
 		if (! canMove(numberOfSteps))
 			throw new UnsupportedOperationException("Cannot move!");
 		else {

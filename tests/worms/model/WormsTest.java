@@ -21,197 +21,224 @@ import worms.util.Util;
 public class WormsTest {
 	
 /**
- * Variables referencing worms
- * 
+ * Variable referencing a mutable worm.
  */
-private static Worm worm1, worm2, worm3;
-
+private static Worm worm1;
 
 /**
- * 
+ * Variables referencing immutable worms.
+ */
+private static Worm worm3, worm4;
+
+/**
  * Set up a mutable test fixture
  * 
- * @post The variables worm1, worm2, worm3 reference to new worms.
- *		 worm1 is named Jonas and has a radius of 2, direction of 3.045, and position (0,0)
- *		 worm2 is named Jeroen and has a radius of 0.25, direction of 4, and position (2,1.75)
- *		 worm3 is named Fred and has a radius of 10, direction of -2.3, and position (-3.75,-1.5)
- * 
+ * @post 	The variable worm1 references the following new worm:
+ *		 	worm1 is named Rocky and has a radius of 2, direction of 3.045 and position (0,0)
  */
 @Before
-public void setUpMutableFixtures(){
-	worm1 = new Worm("Jonas", 2, 3.045, 0, 0);
-	worm2 = new Worm("Jeroen", 0.25, 4, 2, 1.75);
-	worm3 = new Worm("Fred", 10, -2.3, -3.75, -1.5);
-	
+public void setUpMutableFixture() throws Exception {
+	worm1 = new Worm("Rocky", 2, 3.045, 0, 0);
 }
 
-
 /**
- * A method to test the method to set a valid name for the worm. 
+ * Set up a immutable test fixture
+ * 
+ * @post	The variables worm3 and worm4 reference the following new worms respectively:
+ *		 	worm3 is named Rambo and has a radius of 6, direction of 1 and position (5,4)
+ *			worm4 is named Tarzan and has a radius of 3, direction of 4.5 and position (10,9)
  */
+@BeforeClass
+public static void setUpImmutableFixture() throws Exception {
+	worm3 = new Worm("Rambo",6,1,5,4);
+	worm4 = new Worm("Tarzan",3,4.5,10,9);	
+}
+
 @Test
-public void setValidName(){
+public void constructor_LegalCase() throws Exception {
+	Worm myWorm = new Worm("Franck \"The tanck\" 'O Riley",4,3,2,1);
+	assertEquals("Franck \"The tanck\" 'O Riley",myWorm.getName());
+	assertEquals(4,myWorm.getRadius(),Util.DEFAULT_EPSILON);
+	assertEquals(3,myWorm.getDirection(),Util.DEFAULT_EPSILON);
+	assertEquals(2,myWorm.getX(),Util.DEFAULT_EPSILON);
+	assertEquals(1,myWorm.getY(),Util.DEFAULT_EPSILON);
+}
+
+@Test (expected = IllegalArgumentException.class)
+public void constructor_NameWithoutCapitalLetter() throws Exception {
+	new Worm("joske",4,3,2,1);
+}
+
+@Test (expected = IllegalArgumentException.class)
+public void constructor_NameWithInvalidCharacters() throws Exception {
+	new Worm("Joske!",4,3,2,1);
+}
+
+@Test (expected = IllegalArgumentException.class)
+public void constructor_RadiusTooSmall() throws Exception {
+	new Worm("Joske",0.1,3,2,1);
+}
+
+@Test
+public void constructor_DirectionNotBetweenZeroAnd2Pi() throws Exception {
+	Worm myWorm = new Worm("Joske",4,(3 * Math.PI),2,1);
+	assertEquals(Math.PI,myWorm.getDirection(),Util.DEFAULT_EPSILON);
+}
+
+@Test
+public void getName() {
+	assertEquals("Rambo", worm3.getName());
+}
+
+@Test
+public void setName_LegalCase() throws Exception {
 	worm1.setName("Wormpje");
 	assertEquals("Wormpje", worm1.getName());
 }
-/**
- * A method to test the method to set an invalid name for the worm.
- */
-@Test(expected= IllegalArgumentException.class)
-public void setInvalidName(){
-	worm1.setName("jonas");
-	assertEquals("Jonas",worm1.getName());
-	
+
+@Test (expected = IllegalArgumentException.class)
+public void setName_NoCapitalLetter() throws Exception {
+	worm3.setName("wormpje");
 }
 
-/**
- * A method to test the method to set a valid radius for the worm.
- */
+@Test (expected = IllegalArgumentException.class)
+public void setName_InvalidCharacters() throws Exception {
+	worm3.setName("Wormpje!");
+}
 
 @Test
-public void setValidRadius(){
+public void getRadius() {
+	assertEquals(6, worm3.getRadius(), Util.DEFAULT_EPSILON);
+}
+
+@Test
+public void getLowerBoundOfRadius() {
+	assertEquals(0.25, worm3.getLowerBoundOfRadius(), Util.DEFAULT_EPSILON);
+}
+
+@Test
+public void setRadius_LegalCase() throws Exception {
 	worm1.setRadius(3);
 	assertEquals(3, worm1.getRadius(), Util.DEFAULT_EPSILON);
 }
 
-/**
- * A method to test the method to set an invalid radius for the worm.
- */
-
-@Test(expected= IllegalArgumentException.class)
-public void setInvalidRadius(){
+@Test (expected = IllegalArgumentException.class)
+public void setRadius_RadiusTooSmall() throws Exception {
 	worm1.setRadius(0.1);
 	assertEquals(2, worm1.getRadius(), Util.DEFAULT_EPSILON);
 }
 
-/**
- * A method to test the method whether the worm can move or not with a valid input.
- */
 @Test
-public void canMoveWithValidNumberOfSteps(){
-	assertTrue(worm1.canMove(5));
-	
+public void getX() {
+	assertEquals(5, worm3.getX(), Util.DEFAULT_EPSILON);
 }
 
-/**
- * A method to test the method whether the worm can move or not with a negative number of steps.
- */
-@Test(expected= IllegalArgumentException.class)
-public void canMoveWithNegativeNumberOfSteps(){
-	assertFalse(worm1.canMove(-1));
+@Test
+public void getY() {
+	assertEquals(4, worm3.getY(), Util.DEFAULT_EPSILON);
 }
 
-/**
- * A method to test the method whether the worm can move with a too big number of steps.
- */
 @Test
-public void canMoveWithTooBigNumberOfSteps(){
-	assertFalse(worm1.canMove(Integer.MAX_VALUE));
+public void getDirection() {
+	assertEquals(1, worm3.getDirection(), Util.DEFAULT_EPSILON);
 }
 
-/**
- * A method to test the method to do a valid move of the worm.
- */
+@Test
+public void getMass() {
+	assertEquals(960874.9626563597, worm3.getMass(), Util.DEFAULT_EPSILON);
+}
 
 @Test
-public void activeValidMove(){
+public void getMaxNumberOfActionPoints() {
+	assertEquals(960875, worm3.getMaxNumberOfActionPoints(), Util.DEFAULT_EPSILON);
+}
+
+@Test
+public void getNumberOfActionPoints() {
+	assertEquals(960875, worm3.getNumberOfActionPoints(), Util.DEFAULT_EPSILON);
+}
+
+@Test
+public void canMove_LegalCaseTrue() throws Exception {
+	assertTrue(worm3.canMove(5));	
+}
+
+@Test
+public void canMove_LegalCaseFalse() throws Exception {
+	assertFalse(worm3.canMove(Integer.MAX_VALUE - 1000));
+}
+
+@Test (expected = IllegalArgumentException.class)
+public void canMove_NegativeNumberOfSteps() throws Exception {
+	assertFalse(worm3.canMove(-1));
+}
+
+@Test
+public void activeMove_LegalCase() throws Exception {
 	worm1.activeMove(5);
 	assertEquals(-9.9533855557, worm1.getX(), Util.DEFAULT_EPSILON);
-	assertEquals(.964425198, worm1.getY(), Util.DEFAULT_EPSILON);
+	assertEquals(0.964425198, worm1.getY(), Util.DEFAULT_EPSILON);
 	assertEquals(35578, worm1.getNumberOfActionPoints(), Util.DEFAULT_EPSILON);
 }
-/**
- * A method to test the method to do a move of the worm with a too big number of steps.
- */
 
-@Test
-public void activeTooBigMove(){
-	worm1.activeMove(Integer.MAX_VALUE);
-	//assertEquals(0.0, worm1.getX(), Util.DEFAULT_EPSILON);
-	//assertEquals(0.0, worm1.getY(), Util.DEFAULT_EPSILON);
-	assertEquals(35588, worm1.getNumberOfActionPoints());
+@Test (expected = IllegalArgumentException.class)
+public void activeMove_NegativeNumberOfSteps() throws Exception {
+	worm3.activeMove(-5);
 }
 
-/**
- * A method to test the method to do a move of the worm with a negative number of steps.
- */
-
-@Test(expected= IllegalArgumentException.class)
-public void activeNegativeMove(){
-	worm1.activeMove(-5);
-	assertEquals(0, worm1.getX(), Util.DEFAULT_EPSILON);
-	assertEquals(0, worm1.getY(), Util.DEFAULT_EPSILON);
-	assertEquals(35588, worm1.getNumberOfActionPoints());
+@Test (expected = UnsupportedOperationException.class)
+public void activeMove_CannotMove() throws Exception {
+	worm3.activeMove(Integer.MAX_VALUE - 1000);
 }
 
-/**
- * A method to test the method to do a valid turn of the worm.
- */
+@Test
+public void canTurn_LegalCaseTrue() {
+	assertTrue(worm3.canTurn(2));	
+}
 
 @Test
-public void activeValidTurn(){
+public void canTurn_LegalCaseFalse() {
+	worm1.jump();
+	assertTrue(worm1.canTurn(2));	
+}
+
+@Test
+public void activeTurn_LegalCase() {
 	worm1.activeTurn(1.5);
 	assertEquals(4.545, worm1.getDirection(), Util.DEFAULT_EPSILON);
 	assertEquals(35573, worm1.getNumberOfActionPoints());
 }
 
-/**
- * A method to test the method to do a turn of the worm which costs too much action points.
- */
 @Test
-public void activeTooExpensiveTurn(){
+public void activeTurn_CannotTurn() {
 	for (int i = 1; i < 4; i++){
-	if (worm2.canTurn(Math.PI)){
-	worm2.activeTurn(Math.PI);}}
-	assertEquals(4, worm2.getDirection(), Util.DEFAULT_EPSILON);
-	assertEquals(10, worm2.getNumberOfActionPoints());
+	if (worm1.canTurn(Math.PI)){
+	worm1.activeTurn(Math.PI);}}
+	assertEquals(4, worm1.getDirection(), Util.DEFAULT_EPSILON);
+	assertEquals(10, worm1.getNumberOfActionPoints());
 }
-
 
 @Test
-public void getValidMass(){
-	assertEquals(69.50773746, (worm2.getMass()), Util.DEFAULT_EPSILON);
+public void jumpTime(){
+	assertEquals(0.1456145734, worm3.jumpTime(), Util.DEFAULT_EPSILON);
 }
-
-/**
- * A method to test the method to return the worm's time after a jump.
- */
 
 @Test
-public void jumpValidTime(){
-	assertEquals(.1456145734, worm1.jumpTime(), Util.DEFAULT_EPSILON);
+public void jumpStep(){
+	assertEquals(14.78575087, worm3.jumpStep(2.0));
 }
-
-/**
- * A method to test the method to return the worm's coordinates during a specific time of its jump.
- */
-@Test
-public void jumpValidStep(){
-	assertEquals(14.78575087, worm1.jumpStep(2.0));
-}
-
-/**
- * A method to test the method to do an invalid jump of the worm.
- */
-
-@Test(expected= UnsupportedOperationException.class)
-public void invalidJump(){
-	worm2.jump();
-	assertEquals(2, worm2.getX(), Util.DEFAULT_EPSILON);
-	assertEquals(70, worm2.getNumberOfActionPoints());
-	assertEquals(1.75, worm2.getY(), Util.DEFAULT_EPSILON);	
-}
-
-/**
- * A method to test the method to do a valid jump of the worm.
- */
 
 @Test
-public void validJump(){
+public void Jump_LegalCase() throws Exception {
 	worm1.jump();
 	assertEquals(-1.073007217, worm1.getX(), Util.DEFAULT_EPSILON);
 	assertEquals(0, worm1.getNumberOfActionPoints());
 	assertEquals(0, worm1.getY(), Util.DEFAULT_EPSILON);	
+}
+
+@Test (expected = UnsupportedOperationException.class)
+public void Jump_CannotJump() throws Exception {
+	worm4.jump();
 }
 
 }
