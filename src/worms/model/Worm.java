@@ -254,7 +254,7 @@ public class Worm {
 	 */
 	public double getMass() {
 		double p = 1062;
-		return (p * (4 / 3) * Math.PI * Math.pow(this.radius, 3));
+		return ((p * 4 * Math.PI * Math.pow(radius, 3)) / 3);
 	}
 
 	/**
