@@ -108,11 +108,6 @@ public void constructor_YCoordinateNotANumber() throws Exception {
 }
 
 @Test
-public void getName() {
-	assertEquals("Rambo", worm3.getName());
-}
-
-@Test
 public void setName_LegalCase() throws Exception {
 	worm1.setName("Wormpje");
 	assertEquals("Wormpje", worm1.getName());
