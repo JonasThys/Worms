@@ -8,6 +8,12 @@ import worms.util.*;
  * A class of worms involving a name, an x-coordinate, a y-coordinate, an direction,
  * a radius and a current number of action points.
  * 
+ * @invar	Each worm can have its name as its name.
+ * 		|	isPossibleName(getName())
+ * @invar	Each worm can have its radius as its radius.
+ * 		|	isPossibleRadius(getRadius())
+ * 
+ * 
  * @version 1.0
  * @author Jonas Thys & Jeroen Reinenbergh
  * 

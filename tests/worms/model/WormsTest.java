@@ -5,6 +5,8 @@ import static org.junit.Assert.*;
 
 import org.junit.*;
 
+import worms.util.Util;
+
 
 /**
  * 
@@ -65,21 +67,21 @@ public void setInvalidName(){
 /**
  * A method to test the method to set a valid radius for the worm.
  */
-@SuppressWarnings("deprecation")
+
 @Test
 public void setValidRadius(){
 	worm1.setRadius(3);
-	assertEquals(3, worm1.getRadius());
+	assertEquals(3, worm1.getRadius(), Util.DEFAULT_EPSILON);
 }
 
 /**
  * A method to test the method to set an invalid radius for the worm.
  */
-@SuppressWarnings("deprecation")
+
 @Test
 public void setInvalidRadius(){
-	worm1.setRadius(.1);
-	assertEquals(2, worm1.getRadius());
+	worm1.setRadius(0.1);
+	assertEquals(2, worm1.getRadius(), Util.DEFAULT_EPSILON);
 }
 
 /**
@@ -110,46 +112,46 @@ public void canMoveWithTooBigNumberOfSteps(){
 /**
  * A method to test the method to do a valid move of the worm.
  */
-@SuppressWarnings("deprecation")
+
 @Test
 public void activeValidMove(){
 	worm1.activeMove(5);
-	assertEquals(-9.9533855557, worm1.getX());
-	assertEquals(.964425198, worm1.getY());
-	assertEquals(35578, worm1.getNumberOfActionPoints());
+	assertEquals(-9.9533855557, worm1.getX(), Util.DEFAULT_EPSILON);
+	assertEquals(.964425198, worm1.getY(), Util.DEFAULT_EPSILON);
+	assertEquals(35578, worm1.getNumberOfActionPoints(), Util.DEFAULT_EPSILON);
 }
 /**
  * A method to test the method to do a move of the worm with a too big number of steps.
  */
-@SuppressWarnings("deprecation")
+
 @Test
 public void activeTooBigMove(){
 	worm1.activeMove(Integer.MAX_VALUE);
-	assertEquals(0.0, worm1.getX());
-	assertEquals(0.0, worm1.getY());
+	assertEquals(0.0, worm1.getX(), Util.DEFAULT_EPSILON);
+	assertEquals(0.0, worm1.getY(), Util.DEFAULT_EPSILON);
 	assertEquals(35588, worm1.getNumberOfActionPoints());
 }
 
 /**
  * A method to test the method to do a move of the worm with a negative number of steps.
  */
-@SuppressWarnings("deprecation")
+
 @Test
 public void activeNegativeMove(){
 	worm1.activeMove(-5);
-	assertEquals(0.0, worm1.getX());
-	assertEquals(0.0, worm1.getY());
+	assertEquals(0, worm1.getX(), Util.DEFAULT_EPSILON);
+	assertEquals(0, worm1.getY(), Util.DEFAULT_EPSILON);
 	assertEquals(35588, worm1.getNumberOfActionPoints());
 }
 
 /**
  * A method to test the method to do a valid turn of the worm.
  */
-@SuppressWarnings("deprecation")
+
 @Test
 public void activeValidTurn(){
 	worm1.activeTurn(1.5);
-	assertEquals(4.545, worm1.getDirection());
+	assertEquals(4.545, worm1.getDirection(), Util.DEFAULT_EPSILON);
 	assertEquals(35573, worm1.getNumberOfActionPoints());
 }
 
@@ -163,10 +165,10 @@ public void activeTooExpensiveTurn(){
 /**
  * A method to test the method to return the worm's time after a jump.
  */
-@SuppressWarnings("deprecation")
+
 @Test
 public void jumpValidTime(){
-	assertEquals(.1456145734, worm1.jumpTime());
+	assertEquals(.1456145734, worm1.jumpTime(), Util.DEFAULT_EPSILON);
 }
 
 /**
@@ -180,25 +182,25 @@ public void jumpValidStep(){
 /**
  * A method to test the method to do an invalid jump of the worm.
  */
-@SuppressWarnings("deprecation")
+
 @Test
 public void invalidJump(){
 	worm2.jump();
-	assertEquals(2, worm2.getX());
+	assertEquals(2, worm2.getX(), Util.DEFAULT_EPSILON);
 	assertEquals(70, worm2.getNumberOfActionPoints());
-	assertEquals(1.75, worm2.getY());	
+	assertEquals(1.75, worm2.getY(), Util.DEFAULT_EPSILON);	
 }
 
 /**
  * A method to test the method to do a valid jump of the worm.
  */
-@SuppressWarnings("deprecation")
+
 @Test
 public void validJump(){
 	worm1.jump();
-	assertEquals(-1.073007217, worm1.getX());
+	assertEquals(-1.073007217, worm1.getX(), Util.DEFAULT_EPSILON);
 	assertEquals(0, worm1.getNumberOfActionPoints());
-	assertEquals(0, worm1.getY());	
+	assertEquals(0, worm1.getY(), Util.DEFAULT_EPSILON);	
 }
 
 }
