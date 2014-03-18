@@ -8,12 +8,16 @@ import worms.util.*;
  * A class of worms involving a name, an x-coordinate, a y-coordinate, an direction,
  * a radius and a current number of action points.
  * 
+ * @Invar	Each worm can have its x-coordinate as its x-coordinate.
+ * 		|	isPossibleNumber(getX())
+ * @Invar	Each worm can have its y-coordinate as its y-coordinate.
+ * 		|	isPossibleName(getY())
  * @Invar	Each worm can have its name as its name.
  * 		|	isPossibleName(getName())
  * @Invar	Each worm can have its radius as its radius.
  * 		|	isPossibleRadius(getRadius())
  * @Invar	Each worm can have its mass as its mass.
- * 		|	getMass() > 0 && getMass != Double.Na
+ * 		|	getMass() > 0
  * @Invar	Each worm can have its number of action points as its number of action points;
  * 		|	0 < getNumberOfActionPoints() < getMaxNumberOfActionPoints()
  * @Invar	Each worm can have the representative angle of its direction as its direction.
@@ -127,23 +131,6 @@ public class Worm {
 	}
 	
 	/**
-	 * Set the x-coordinate of this worm to the given x-coordinate
-
-	 * @param	x
-	 * 			The new x-coordinate of this worm.
-	 * @post	The new x-coordinate of this worm is equal to the given x-coordinate.
-	 * 		|	new.getX() == x
-	 */
-	private void setX(double x) {
-		this.x = x;
-	}
-
-	/**
-	 * Variable registering the x-coordinate of this worm.
-	 */
-	private double x;
-
-	/**
 	 * Return the y-coordinate of the worm.
 	 * 	The y-coordinate expresses the position
 	 * 	at which the worm is located on the y-axis.
@@ -151,6 +138,36 @@ public class Worm {
 	@Basic
 	public double getY() {
 		return y;
+	}
+	
+	/**
+	 * Check whether the given number is a possible number for any Double-variable.
+	 * 
+	 * @param	number
+	 * 			The number to check.
+	 * @return	True if and only if the given number is not categorized as Not A Number in Double-representation.
+	 * 		|	result == (number != Double.NaN)
+	 */
+	@Model
+	private static boolean isPossibleNumber(Double number) {
+		return (number != Double.NaN);
+	}
+
+	/**
+	 * Set the x-coordinate of this worm to the given x-coordinate
+
+	 * @param	x
+	 * 			The new x-coordinate of this worm.
+	 * @post	The new x-coordinate of this worm is equal to the given x-coordinate.
+	 * 		|	new.getX() == x
+	 * @throws	IllegalArgumentException("Invalid number!")
+	 * 			This worm cannot have the given number as its x-coordinate.
+	 * 		|	! isPossibleNumber(x)
+	 */
+	private void setX(double x) throws IllegalArgumentException {
+		if (!isPossibleNumber(x))
+			throw new IllegalArgumentException("Invalid number!");
+		this.x = x;
 	}
 
 	/**
@@ -160,10 +177,20 @@ public class Worm {
 	 * 			The new y-coordinate of this worm.
 	 * @post	The new y-coordinate of this worm is equal to the given y-coordinate.
 	 * 		|	new.getY() == y
+	 * @throws	IllegalArgumentException("Invalid number!")
+	 * 			This worm cannot have the given number as its y-coordinate.
+	 * 		|	! isPossibleNumber(y)
 	 */
 	private void setY(double y) {
+		if (!isPossibleNumber(y))
+			throw new IllegalArgumentException("Invalid number!");
 		this.y = y;
 	}
+	
+	/**
+	 * Variable registering the x-coordinate of this worm.
+	 */
+	private double x;
 	
 	/**
 	 * Variable registering the y-coordinate of this worm.
@@ -187,8 +214,13 @@ public class Worm {
 	 * @post	The new direction of this worm is similar to the given direction 
 	 * 			and is equal to its smallest representative angle that lies between zero and 2*pi, excluding the latter.
 	 * 		|	new.getDirection() == convertToRepresentativeAngle(direction)
+	 * @throws	IllegalArgumentException("Invalid number!")
+	 * 			This worm cannot have the given number as its direction.
+	 * 		|	! isPossibleNumber(direction)
 	 */
-	private void setDirection(double direction) {
+	private void setDirection(double direction) throws IllegalArgumentException {
+		if (!isPossibleNumber(direction))
+			throw new IllegalArgumentException("Invalid number!");
 		this.direction = convertToRepresentativeAngle(direction);
 	}
 
@@ -236,12 +268,12 @@ public class Worm {
 	 * 
 	 * @param	radius
 	 * 			The radius to check.
-	 * @return	True if and only if the given radius is not smaller than its lower bound.
-	 * 		|	result == (radius >= lowerBoundOfRadius)
+	 * @return	True if and only if the given radius is a valid number and if it is not smaller than its lower bound.
+	 * 		|	result == (isPossibleNumber(radius) && (radius >= lowerBoundOfRadius))
 	 */
 	@Model
 	private boolean isPossibleRadius(double radius){
-		return Util.fuzzyGreaterThanOrEqualTo(radius, lowerBoundOfRadius);
+		return (isPossibleNumber(radius) && Util.fuzzyGreaterThanOrEqualTo(radius, lowerBoundOfRadius));
 	}
 	
 	/**
