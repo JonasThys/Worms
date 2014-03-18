@@ -13,10 +13,10 @@ import worms.util.*;
  * @Invar	Each worm can have its radius as its radius.
  * 		|	isPossibleRadius(getRadius())
  * @Invar	Each worm can have its mass as its mass.
- * 		|	getMass() > 0
+ * 		|	getMass() > 0 && getMass != Double.Na
  * @Invar	Each worm can have its number of action points as its number of action points;
  * 		|	0 < getNumberOfActionPoints() < getMaxNumberOfActionPoints()
- * @Invar	Each worm can have its the representative angle of its direction as its direction.
+ * @Invar	Each worm can have the representative angle of its direction as its direction.
  * 		|	0 <= getDirection() < pi
  * 
  * 
