@@ -8,16 +8,16 @@ import worms.util.*;
  * A class of worms involving a name, an x-coordinate, a y-coordinate, an direction,
  * a radius and a current number of action points.
  * 
- * @invar	Each worm can have its name as its name.
+ * @Invar	Each worm can have its name as its name.
  * 		|	isPossibleName(getName())
- * @invar	Each worm can have its radius as its radius.
+ * @Invar	Each worm can have its radius as its radius.
  * 		|	isPossibleRadius(getRadius())
- * @invar	Each worm can have its mass as its mass.
+ * @Invar	Each worm can have its mass as its mass.
  * 		|	getMass() > 0
- * @invar	Each worm can have its number of action points as its number of action points;
+ * @Invar	Each worm can have its number of action points as its number of action points;
  * 		|	0 < getNumberOfActionPoints() < getMaxNumberOfActionPoints()
- * @invar	Each worm can have its direction as its direction.
- * 		|	0 < getDirection() < pi
+ * @Invar	Each worm can have its the representative angle of its direction as its direction.
+ * 		|	0 <= getDirection() < pi
  * 
  * 
  * @version 1.0
@@ -89,6 +89,7 @@ public class Worm {
 	 * 			starts with an uppercase letter and only contains letters, quotes and spaces.
 	 * 		|	result == (name.matches("[A-Z]"+"[A-Za-z\"\' ]+"))
 	 */
+	@Model
 	private static boolean isPossibleName(String name) {
 		return name.matches("[A-Z]"+"[A-Za-z\"\' ]+");
 	}	
@@ -200,7 +201,6 @@ public class Worm {
 	 * 		|	angle = result + (constant * 2 * pi)
 	 * 		|	0 <= result < (2 * pi)
 	 */	
-	@Model
 	private double convertToRepresentativeAngle(double angle){
 		while(angle < 0){
 			angle += 2 * Math.PI;
@@ -239,6 +239,7 @@ public class Worm {
 	 * @return	True if and only if the given radius is not smaller than its lower bound.
 	 * 		|	result == (radius >= lowerBoundOfRadius)
 	 */
+	@Model
 	private boolean isPossibleRadius(double radius){
 		return Util.fuzzyGreaterThanOrEqualTo(radius, lowerBoundOfRadius);
 	}
@@ -333,6 +334,7 @@ public class Worm {
 	 * @return	True if and only if the given number of steps is not smaller than zero.
 	 * 		|	result == (numberOfSteps >= 0)
 	 */
+	@Model
 	private boolean isPossibleNumberOfSteps(int numberOfSteps){
 		return numberOfSteps >= 0;
 	}
@@ -348,6 +350,7 @@ public class Worm {
 	 * 			The given number of steps is not a possible number of steps for any worm.
 	 * 		|	! isPossibleNumberOfSteps(numberOfSteps)
 	 */
+	@Model
 	private int amountOfActionPointsForMoving(int numberOfSteps ) throws IllegalArgumentException {
 		if (!isPossibleNumberOfSteps(numberOfSteps)) 
 			throw new IllegalArgumentException("Invalid number of steps!");
@@ -389,6 +392,7 @@ public class Worm {
 	 * 			The given number of steps is not a valid number of steps for any worm.
 	 * 		|	! isPossibleNumberOfSteps(numberOfSteps)
 	 */
+	@Model
 	private void move(int numberOfSteps) throws IllegalArgumentException {
 		if (!isPossibleNumberOfSteps(numberOfSteps)) 
 			throw new IllegalArgumentException("Invalid number of steps!");
@@ -442,6 +446,7 @@ public class Worm {
 	 * 		|	if (convertToRepresentativeAngle(turnByAngle) > (2 * pi)) effectiveAngle == (2 * Math.PI) - convertToRepresentativeAngle(turnByAngle)
 	 * 		|	else effectiveAngle == convertToRepresentativeAngle(turnByAngle)
 	 */
+	@Model
 	private int amountOfActionPointsForTurning(double turnByAngle){
 		double effectiveAngle = convertToRepresentativeAngle(turnByAngle);
 		if(effectiveAngle > Math.PI)
@@ -474,6 +479,7 @@ public class Worm {
 	 * 			and is equal to its smallest representative angle that lies between zero and 2*pi, excluding the latter.
 	 * 		|	new.getDirection() == convertToRepresentativeAngle(this.getDirection() + turnByAngle)
 	 */
+	@Model
 	private void turn(double turnByAngle){
 		setDirection(convertToRepresentativeAngle(direction + turnByAngle));
 	}
@@ -504,6 +510,7 @@ public class Worm {
 	 * 		|	result == (force / getMass()) * 0.5
 	 * 		|	force == (5 * numberOfActionPoints) + (getMass() * standardAcceleration)
 	 */
+	@Model
 	private double initialVelocity(){
 		double force = (5 * numberOfActionPoints) + (getMass() * standardAcceleration);
 		return ((force / getMass()) * 0.5);
@@ -515,6 +522,7 @@ public class Worm {
 	 * @return	The horizontal jumping distance of this worm is equal to the product of its squared initial velocity, the sinus of its doubled direction and the inverse of Earth's standard acceleration coefficient.
 	 * 		|	result == (initialVelocity()^2 * sin(direction * 2)) / standardAcceleration
 	 */	
+	@Model
 	private double horizontalJumpDistance(){
 		return ((Math.pow(initialVelocity(), 2) * Math.sin(direction * 2)) / standardAcceleration);
 	}
@@ -536,6 +544,7 @@ public class Worm {
 	 * 			incremented with the product of its initial velocity, the cosinus of its direction and the given time that has passed.
 	 * 		|	result == x + (initialVelocity() * Math.cos(direction) * timePassed)
 	 */	
+	@Model
 	private double jumpStepOnXAxis(double timePassed){
 		return (x + (initialVelocity() * Math.cos(direction) * timePassed));
 	}
@@ -548,6 +557,7 @@ public class Worm {
 	 * 			and decremented with the product of Earth's standard acceleration coefficient, the squared time that has passed and the constant 0.5.
 	 * 		|	result == y + ((initialVelocity() * Math.sin(direction) * timePassed) - ((1/2) * standardAcceleration * timePassed^2))
 	 */		
+	@Model
 	private double jumpStepOnYAxis(double timePassed){
 		return (y + ((initialVelocity() * Math.sin(direction) * timePassed) - ((0.5) * standardAcceleration * Math.pow(timePassed, 2))));
 	}	
@@ -571,6 +581,7 @@ public class Worm {
 	 * @return	True if and only if the direction of this worm is not greater than pi.
 	 * 		|	result == (direction <= Math.PI)
 	 */	
+	@Model
 	private boolean canJump(){
 		return Util.fuzzyLessThanOrEqualTo(direction, Math.PI);
 	}

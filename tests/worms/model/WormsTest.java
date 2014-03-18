@@ -220,12 +220,13 @@ public void activeTurn_CannotTurn() {
 
 @Test
 public void jumpTime(){
-	assertEquals(0.1456145734, worm3.jumpTime(), Util.DEFAULT_EPSILON);
+	assertEquals(1.270501804461395, worm3.jumpTime(), Util.DEFAULT_EPSILON);
 }
 
 @Test
 public void jumpStep(){
-	assertEquals(14.78575087, worm3.jumpStep(2.0));
+	assertEquals(9.000033621087294, worm3.jumpStep(1.0)[0], Util.DEFAULT_EPSILON);
+	assertEquals(5.32635826036067, worm3.jumpStep(1.0)[1], Util.DEFAULT_EPSILON);
 }
 
 @Test
