@@ -506,11 +506,11 @@ public class Worm {
 	/**
 	 * Return the time passed after a jump of this worm.
 	 * 
-	 * @return	The jump time equals the absolute value of the quotient of the worm's horizontal jump distance and the product of its initial velocity and the cosinus of its direction.
-	 * 		|	result == |horizontalJumpDistance() / (initialVelocity() * Math.cos(direction))|
+	 * @return	The jump time equals the quotient of the worm's horizontal jump distance and the product of its initial velocity and the cosinus of its direction.
+	 * 		|	result == horizontalJumpDistance() / (initialVelocity() * Math.cos(direction))
 	 */	
 	public double jumpTime(){
-		return (Math.abs(horizontalJumpDistance() / (initialVelocity() * Math.cos(direction))));
+		return (horizontalJumpDistance() / (initialVelocity() * Math.cos(direction)));
 	}
 	
 	/**
