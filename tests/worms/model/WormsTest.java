@@ -23,7 +23,7 @@ public class WormsTest {
 /**
  * Variable referencing a mutable worm.
  */
-private static Worm worm1;
+private static Worm worm1, worm2;
 
 /**
  * Variables referencing immutable worms.
@@ -39,7 +39,10 @@ private static Worm worm3, worm4;
 @Before
 public void setUpMutableFixture() throws Exception {
 	worm1 = new Worm("Rocky", 2, 3.045, 0, 0);
+	worm2 = new Worm("Frenzy", 0.25, 4, 0, 0);
 }
+
+
 
 /**
  * Set up a immutable test fixture
@@ -128,34 +131,10 @@ public void setRadius_RadiusTooSmall() throws Exception {
 	assertEquals(2, worm1.getRadius(), Util.DEFAULT_EPSILON);
 }
 
-@Test
-public void getX() {
-	assertEquals(5, worm3.getX(), Util.DEFAULT_EPSILON);
-}
-
-@Test
-public void getY() {
-	assertEquals(4, worm3.getY(), Util.DEFAULT_EPSILON);
-}
-
-@Test
-public void getDirection() {
-	assertEquals(1, worm3.getDirection(), Util.DEFAULT_EPSILON);
-}
 
 @Test
 public void getMass() {
 	assertEquals(960874.9626563597, worm3.getMass(), Util.DEFAULT_EPSILON);
-}
-
-@Test
-public void getMaxNumberOfActionPoints() {
-	assertEquals(960875, worm3.getMaxNumberOfActionPoints(), Util.DEFAULT_EPSILON);
-}
-
-@Test
-public void getNumberOfActionPoints() {
-	assertEquals(960875, worm3.getNumberOfActionPoints(), Util.DEFAULT_EPSILON);
 }
 
 @Test
@@ -199,7 +178,7 @@ public void canTurn_LegalCaseTrue() {
 @Test
 public void canTurn_LegalCaseFalse() {
 	worm1.jump();
-	assertTrue(worm1.canTurn(2));	
+	assertFalse(worm1.canTurn(2));	
 }
 
 @Test
@@ -212,10 +191,10 @@ public void activeTurn_LegalCase() {
 @Test
 public void activeTurn_CannotTurn() {
 	for (int i = 1; i < 4; i++){
-	if (worm1.canTurn(Math.PI)){
-	worm1.activeTurn(Math.PI);}}
-	assertEquals(4, worm1.getDirection(), Util.DEFAULT_EPSILON);
-	assertEquals(10, worm1.getNumberOfActionPoints());
+	if (worm2.canTurn(Math.PI)){
+	worm2.activeTurn(Math.PI);}}
+	assertEquals(4, worm2.getDirection(), Util.DEFAULT_EPSILON);
+	assertEquals(10, worm2.getNumberOfActionPoints());
 }
 
 @Test
