@@ -52,7 +52,7 @@ public void setUpMutableFixture() throws Exception {
  */
 @BeforeClass
 public static void setUpImmutableFixture() throws Exception {
-	worm3 = new Worm("Rambo",6,1,5,4);
+	worm3 = new Worm("Rambo",1,1,5,4);
 	worm4 = new Worm("Tarzan",3,4.5,10,9);	
 }
 
@@ -141,7 +141,7 @@ public void setRadius_RadiusNotANumber() throws Exception {
 
 @Test
 public void getMass() {
-	assertEquals(960874.9626563597, worm3.getMass(), Util.DEFAULT_EPSILON);
+	assertEquals(4448.4951974831465, worm3.getMass(), Util.DEFAULT_EPSILON);
 }
 
 @Test
@@ -151,7 +151,7 @@ public void canMove_LegalCaseTrue() throws Exception {
 
 @Test
 public void canMove_LegalCaseFalse() throws Exception {
-	assertFalse(worm3.canMove(Integer.MAX_VALUE - 1000));
+	assertFalse(worm3.canMove(2000));
 }
 
 @Test (expected = IllegalArgumentException.class)
@@ -174,7 +174,7 @@ public void activeMove_NegativeNumberOfSteps() throws Exception {
 
 @Test (expected = UnsupportedOperationException.class)
 public void activeMove_CannotMove() throws Exception {
-	worm3.activeMove(Integer.MAX_VALUE - 1000);
+	worm3.activeMove(2000);
 }
 
 @Test
@@ -204,13 +204,13 @@ public void activeTurn_CannotTurn() {
 
 @Test
 public void jumpTime(){
-	assertEquals(1.270501804461395, worm3.jumpTime(), Util.DEFAULT_EPSILON);
+	assertEquals(1.2704540289466788, worm3.jumpTime(), Util.DEFAULT_EPSILON);
 }
 
 @Test
 public void jumpStep(){
-	assertEquals(9.000033621087294, worm3.jumpStep(1.0)[0], Util.DEFAULT_EPSILON);
-	assertEquals(5.32635826036067, worm3.jumpStep(1.0)[1], Util.DEFAULT_EPSILON);
+	assertEquals(8.999883205192992, worm3.jumpStep(1.0)[0], Util.DEFAULT_EPSILON);
+	assertEquals(5.326124001484975, worm3.jumpStep(1.0)[1], Util.DEFAULT_EPSILON);
 }
 
 @Test
