@@ -1,11 +1,5 @@
 //TODO
 
-TESTS uitschrijven // gebeurd
-
-INVARIANTEN toevoegen
-Vragen hoe we invarianten formeel bewijzen.
-Deze toevoegen: direction tussen 0 en p, action points tussen 0 en max, mass positief
-
-
-@Model tags toevoegen
-NaN aan invarianten toevoegen
+Feedback questions
+- Rechtstreekse deling van integers: waarom fout?
+- JUnit tests: waarom soms failure wanneer getallen overeenkomen? (vb. getX, getY)
